@@ -302,39 +302,16 @@
 
       
         
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
 <p>由于兴趣想使用go语言，所以想在sublime text3来开发go语言，目前主流的配置都是在<strong>sublime text3</strong>安装<strong>GoSublime</strong>插件和<strong>Golang build</strong>插件，其中，<strong>Golang build</strong>插件是go官方提供的支持go run,go get,go install等命令的插件，而<strong>GoSublime</strong>是一个交互式的go build工具，使用起来也是很方便，主要配合Golang build使用。</p>
 </blockquote>
-<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><blockquote>
-<p>sublime text3安装和go语言安装参照网上教程</p>
-</blockquote>
-<h2 id="安装Golang-build插件"><a href="#安装Golang-build插件" class="headerlink" title="安装Golang build插件"></a>安装Golang build插件</h2><ul>
-<li>通过command + shit + p打开sublime text的package control，package control是sublime text的一个包安装工具。</li>
-<li>输入pcip，选择第一个进入包安装<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434118080920.jpg" alt=""></li>
-<li>然后输入Golang build选择Golang build安装</li>
-<li><p>进入perferences -&gt; package settings -&gt; Golang Config -&gt; Settings-User配置<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434128908830.jpg" alt=""><br>配置PATH和GOPATH，配置的是go的项目路径，不是安装路径。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;PATH&quot;: &quot;/Users/workspace/go/bin&quot;,</span><br><span class="line">    // 这里改成你自己的GOPATH</span><br><span class="line">    &quot;GOPATH&quot;: &quot;/Users/workspace/go&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>点击tools -&gt; build wiht(或者快捷键command + shift + b)即可以在控制台使用get run、go install、go build、go clean等命令。(由于我安装了goSublime插件，所以是控制台效果，否则是在一个框里的)<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434171931456.jpg" alt=""></p>
-<h2 id="安装Go-Sublime插件"><a href="#安装Go-Sublime插件" class="headerlink" title="安装Go Sublime插件"></a>安装Go Sublime插件</h2><blockquote>
-<p>以前可以直接通过package install来安装这个插件，但是最新的情况是在package install找不到这个了，所以我们必须手动安装。</p>
-</blockquote>
-</li>
-<li><p>首先要找到自己的插件安装路径，在perferences -&gt; Browse Packages可以找到。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434174695124.jpg" alt=""></p>
-</li>
-<li>然后在该路径下通过<code>git clone https://margo.sh/GoSublime</code>命令即可以下载该插件了（进入控制台输入该命令）。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434180146579.jpg" alt=""></li>
-<li><p>同样的，我们也要设置Go Sublime。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434181183668.jpg" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;env&quot;: &#123;</span><br><span class="line">        &quot;GOPATH&quot;: &quot;/Users/workspace/go&quot;,  //go程序的个人代码工程路径</span><br><span class="line">        &quot;GOROOT&quot;: &quot;/usr/local/go&quot;  //go语言安装路径</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写一个go程序，通过<code>command + shift + b</code>或者 <code>command + b</code>即可以在控制台运行该程序。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434184404804.jpg" alt=""></p>
-</li>
-</ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
-<p><a href="https://yq.aliyun.com/articles/615533" target="_blank" rel="noopener">https://yq.aliyun.com/articles/615533</a><br><a href="https://awen.me/post/64483.html" target="_blank" rel="noopener">https://awen.me/post/64483.html</a><br><a href="https://github.com/DisposaBoy/GoSublime/tree/development" target="_blank" rel="noopener">https://github.com/DisposaBoy/GoSublime/tree/development</a></p>
-</blockquote>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/28/go-sublime-md/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
