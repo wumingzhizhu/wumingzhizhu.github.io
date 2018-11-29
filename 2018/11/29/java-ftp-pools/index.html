@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 由于工作需要使用到ftp服务，一开始是每次建立ftp连接，上传文件成功后，再释放连接，后来发现这个方法太浪费资源和时间了，就想到了使用ftp连接池的方式实现，这样，预先创建好ftp连接池，需要上传的时候从池子取一个连接，上传成功后再放回池子即可，省下了创建和释放ftp连接的时间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java实现ftp连接池">
+<meta property="og:url" content="http://zeromk.top/2018/11/29/java-ftp-pools/index.html">
+<meta property="og:site_name" content="二次元与程序员">
+<meta property="og:description" content="前言 由于工作需要使用到ftp服务，一开始是每次建立ftp连接，上传文件成功后，再释放连接，后来发现这个方法太浪费资源和时间了，就想到了使用ftp连接池的方式实现，这样，预先创建好ftp连接池，需要上传的时候从池子取一个连接，上传成功后再放回池子即可，省下了创建和释放ftp连接的时间。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-29T17:11:48.541Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java实现ftp连接池">
+<meta name="twitter:description" content="前言 由于工作需要使用到ftp服务，一开始是每次建立ftp连接，上传文件成功后，再释放连接，后来发现这个方法太浪费资源和时间了，就想到了使用ftp连接池的方式实现，这样，预先创建好ftp连接池，需要上传的时候从池子取一个连接，上传成功后再放回池子即可，省下了创建和释放ftp连接的时间。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zeromk.top/2018/11/29/java-ftp-pools/"/>
+
+
+
+
+
+  <title>java实现ftp连接池 | 二次元与程序员</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">二次元与程序员</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-主页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zeromk.top/2018/11/29/java-ftp-pools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="博莱特萧">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="二次元与程序员">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java实现ftp连接池</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-29T15:08:05+08:00">
+                2018-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>由于工作需要使用到ftp服务，一开始是每次建立ftp连接，上传文件成功后，再释放连接，后来发现这个方法太浪费资源和时间了，就想到了使用ftp连接池的方式实现，这样，预先创建好ftp连接池，需要上传的时候从池子取一个连接，上传成功后再放回池子即可，省下了创建和释放ftp连接的时间。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="ftp服务的配置文件"><a href="#ftp服务的配置文件" class="headerlink" title="ftp服务的配置文件"></a>ftp服务的配置文件</h2><blockquote>
+<p>在<code>config.properties</code>配置好ftp服务</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ftp.ip=127.0.0.1</span><br><span class="line">ftp.username=root</span><br><span class="line">ftp.password=root</span><br><span class="line">ftp.port=21</span><br></pre></td></tr></table></figure>
+<h2 id="FtpClientConfig"><a href="#FtpClientConfig" class="headerlink" title="FtpClientConfig"></a>FtpClientConfig</h2><blockquote>
+<p><code>FtpClientConfig</code>是用于读取<code>config.properties</code>的一个实体类</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class FtpClientConfig &#123;</span><br><span class="line"></span><br><span class="line">    private String host;</span><br><span class="line"></span><br><span class="line">    private int port;</span><br><span class="line"></span><br><span class="line">    private String username;</span><br><span class="line"></span><br><span class="line">    private String password;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<h2 id="FtpClientFactory"><a href="#FtpClientFactory" class="headerlink" title="FtpClientFactory"></a>FtpClientFactory</h2><blockquote>
+<p><code>FtpClientFactory</code>可以理解为一个工厂类，用于生成ftp连接、销毁ftp连接以及检测ftp连接是否有效。</p>
+</blockquote>
+<ul>
+<li>生成ftp连接</li>
+</ul>
+<blockquote>
+<p>在生成ftp连接的时候，我们可以设定连接的超时时间等，ftp有<strong>主动模式</strong>和<strong>被动模式</strong>两种模式。</p>
+</blockquote>
+<ol>
+<li><strong>主动模式</strong>：FTP客户端随机开启一个大于1024的端口N向服务器的21号端口发起连接，然后开放N+1号端口进行监听，并向服务器发出PORT N+1命令。服务器接收到命令后，会用其本地的FTP数据端口（通常是20）来连接客户端指定的端口N+1，进行数据传输</li>
+<li><strong>被动模式</strong>：FTP客户端随机开启一个大于1024的端口N向服务器的21号端口发起连接，同时会开启N+1号端口。然后向服务器发送PASV命令，通知服务器自己处于被动模式。服务器收到命令后，会开放一个大于1024的端口P进行监听，然后用PORT P命令通知客户端，自己的数据端口是P。客户端收到命令后，会通过N+1号端口连接服务器的端口P，然后在两个端口之间进行数据传输。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public FTPClient makeClient() throws Exception&#123;</span><br><span class="line">    FTPClient ftpClient = new FTPClient();</span><br><span class="line">    ftpClient.setConnectTimeout(1000 * 10);</span><br><span class="line">    try &#123;</span><br><span class="line">        ftpClient.connect(config.getHost(), config.getPort());</span><br><span class="line">        boolean result = ftpClient.login(config.getUsername(), config.getPassword());</span><br><span class="line">        if(!result) &#123;</span><br><span class="line">            log.info(&quot;ftp登录失败,username: &#123;&#125;&quot;,config.getUsername());</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ftpClient.setControlEncoding(encode);</span><br><span class="line">        ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);</span><br><span class="line">        //被动模式 被动模式是客户端向服务端发送PASV命令，服务端随机开启一个端口并通知客户端，客户端根据该端口与服务端建立连接，然后发送数据。服务端是两种模式的，</span><br><span class="line">        //使用哪种模式取决于客户端，同时关键点在于网络环境适合用哪种模式，比如客户端在防火墙内，则最好选择被动模式</span><br><span class="line">        //在mac下测试用被动模式没问题，用主动模式则报错，在linux服务器上则相反</span><br><span class="line">        //ftpClient.enterLocalPassiveMode();</span><br><span class="line">        ftpClient.enterLocalActiveMode();</span><br><span class="line"></span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;makeClient exception&quot;,e);</span><br><span class="line">        destroyClient(ftpClient);</span><br><span class="line">        throw e;</span><br><span class="line">    &#125;</span><br><span class="line">    return ftpClient;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>销毁ftp连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public void destroyClient(FTPClient ftpClient) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        if(ftpClient != null &amp;&amp; ftpClient.isConnected()) &#123;</span><br><span class="line">            ftpClient.logout();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;ftpClient logout exception&quot;,e);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            if(ftpClient != null) &#123;</span><br><span class="line">                ftpClient.disconnect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e2) &#123;</span><br><span class="line">            log.error(&quot;ftpClient disconnect exception&quot;,e2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>检测ftp连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public boolean validateClient(FTPClient ftpClient) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        return ftpClient.sendNoOp();</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;ftpClient validate exception&quot;,e);</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="FtpClientPool"><a href="#FtpClientPool" class="headerlink" title="FtpClientPool"></a>FtpClientPool</h2><blockquote>
+<p><code>FtpClientPool</code>就是我们真正使用的类，我们使用了<code>BlockingQueue</code>阻塞对列来实现连接池的效果，如果需要进行ftp连接，就从连接池获取一个连接，完成后就把连接归还到池子里。使用阻塞对列是为了防止多线程时多个线程同时获取了同一个ftp连接导致失败。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private static final int DEFAULT_POOL_SIZE = 16;</span><br><span class="line"></span><br><span class="line">private BlockingQueue&lt;FTPClient&gt; pool;</span><br><span class="line"></span><br><span class="line">private FtpClientFactory factory;</span><br><span class="line"></span><br><span class="line">public FtpClientPool(FtpClientFactory factory) &#123;</span><br><span class="line">    this(factory, DEFAULT_POOL_SIZE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public FtpClientPool(FtpClientFactory factory,int size) &#123;</span><br><span class="line">    this.factory = factory;</span><br><span class="line">    this.pool = new ArrayBlockingQueue&lt;&gt;(size);</span><br><span class="line">    initPool(size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>初始化</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private void initPool(int maxPoolSize) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        int count = 0;</span><br><span class="line">        while (count &lt; maxPoolSize) &#123;</span><br><span class="line">            pool.offer(factory.makeClient(),10,TimeUnit.SECONDS);</span><br><span class="line">            count ++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;ftp连接池初始化失败&quot;,e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从阻塞对列获取一个ftp连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public FTPClient borrowClient() throws Exception&#123;</span><br><span class="line">    FTPClient client = pool.take();</span><br><span class="line">    if(client == null) &#123;</span><br><span class="line">        client = factory.makeClient();</span><br><span class="line">        //addClient(client);</span><br><span class="line">        returnClient(client);</span><br><span class="line">    &#125;else if(!factory.validateClient(client)) &#123;</span><br><span class="line">        invalidateClient(client);</span><br><span class="line">        client = factory.makeClient();</span><br><span class="line">        //addClient(client);</span><br><span class="line">        returnClient(client);</span><br><span class="line">    &#125;</span><br><span class="line">    return client;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>归还一个ftp连接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void returnClient(FTPClient ftpClient) throws Exception&#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        if(ftpClient != null &amp;&amp; !pool.offer(ftpClient, 10, TimeUnit.SECONDS)) &#123;</span><br><span class="line">            factory.destroyClient(ftpClient);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;归还对象失败&quot;,e);</span><br><span class="line">        throw e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="FtpClientKeepAlive"><a href="#FtpClientKeepAlive" class="headerlink" title="FtpClientKeepAlive"></a>FtpClientKeepAlive</h2><blockquote>
+<p>如果服务器设置了ftp连接在一段时间内不使用会自动断开连接，就会导致我们的连接超过时间就会失败，为了避免一直重复创建连接，这里使用了长连接，<code>FtpClientKeepAlive</code>负责保持长连接，如果连接失效，就重新创建连接。</p>
+</blockquote>
+<p>根据服务器超时时间设置长连接保持的时间，每隔一段时间，从阻塞对列获取连接来进行验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">public class FtpClientKeepAlive &#123;</span><br><span class="line"></span><br><span class="line">    private static final Logger log = LoggerFactory.getLogger(FtpClientKeepAlive.class);</span><br><span class="line"></span><br><span class="line">    private KeepAliveThread keepAliveThread;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private FtpClientPool ftpClientPool;</span><br><span class="line"></span><br><span class="line">    public void init() &#123;</span><br><span class="line">        // 启动心跳检测线程</span><br><span class="line">        if (keepAliveThread == null) &#123;</span><br><span class="line">            keepAliveThread = new KeepAliveThread();</span><br><span class="line">            Thread thread = new Thread(keepAliveThread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class KeepAliveThread implements Runnable &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            FTPClient ftpClient = null;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    BlockingQueue&lt;FTPClient&gt; pool = ftpClientPool.getPool();</span><br><span class="line">                    if (pool != null &amp;&amp; pool.size() &gt; 0) &#123;</span><br><span class="line">                        Iterator&lt;FTPClient&gt; it = pool.iterator();</span><br><span class="line">                        while (it.hasNext()) &#123;</span><br><span class="line">                            ftpClient = it.next();</span><br><span class="line">                            boolean result = ftpClient.sendNoOp();</span><br><span class="line">                            log.info(&quot;心跳结果: &#123;&#125;&quot;,result);</span><br><span class="line">                            if (!result) &#123;</span><br><span class="line">                                ftpClientPool.invalidateClient(ftpClient);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; catch (Exception e) &#123;</span><br><span class="line">                    log.error(&quot;ftp心跳检测异常&quot;, e);</span><br><span class="line">                    ftpClientPool.invalidateClient(ftpClient);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                // 每30s发送一次心跳，服务器超时时间为60s</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(1000 * 30);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    // TODO Auto-generated catch block</span><br><span class="line">                    log.error(&quot;ftp休眠异常&quot;, e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="spring-ftp-xml"><a href="#spring-ftp-xml" class="headerlink" title="spring-ftp.xml"></a>spring-ftp.xml</h2><blockquote>
+<p>由于项目是使用spring的，所以在xml配置文件里进行bean的配置。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 省略了spring beans头部配置--&gt;</span><br><span class="line">&lt;bean id=&quot;propertyConfigurer&quot; class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;</span><br><span class="line">    &lt;property name=&quot;location&quot; value=&quot;classpath:config.properties&quot; /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=&quot;ftpClientConfig&quot; class=&quot;com.zeromk.study.util.FtpClientConfig&quot;&gt;</span><br><span class="line">    &lt;property name=&quot;host&quot; value=&quot;$&#123;ftp.ip&#125;&quot;/&gt;</span><br><span class="line">    &lt;property name=&quot;port&quot; value=&quot;$&#123;ftp.port&#125;&quot;/&gt;</span><br><span class="line">    &lt;property name=&quot;username&quot; value=&quot;$&#123;ftp.username&#125;&quot;/&gt;</span><br><span class="line">    &lt;property name=&quot;password&quot; value=&quot;$&#123;ftp.password&#125;&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=&quot;ftpClientFactory&quot; class=&quot;com.zeromk.study.util.FtpClientFactory&quot;&gt;</span><br><span class="line">    &lt;constructor-arg index=&quot;0&quot; ref=&quot;ftpClientConfig&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=&quot;ftpClientPool&quot; class=&quot;com.zeromk.study.util.FtpClientPool&quot;&gt;</span><br><span class="line">    &lt;constructor-arg index=&quot;0&quot; ref=&quot;ftpClientFactory&quot;/&gt;</span><br><span class="line">    &lt;constructor-arg index=&quot;1&quot; value=&quot;8&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=&quot;ftpClientKeepAlive&quot; class=&quot;com.zeromk.study.util.FtpClientKeepAlive&quot; init-method=&quot;init&quot;&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><p>详细代码请参考github。</p>
+<blockquote>
+<p><a href="https://github.com/wumingzhizhu/springTest" target="_blank" rel="noopener">https://github.com/wumingzhizhu/springTest</a></p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="https://github.com/jimiyi/ftpService" target="_blank" rel="noopener">https://github.com/jimiyi/ftpService</a><br><a href="http://blog.51cto.com/11010174/1983978" target="_blank" rel="noopener">http://blog.51cto.com/11010174/1983978</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/28/go-sublime-md/" rel="next" title="mac环境下sublime text3配置go语言开发环境">
+                <i class="fa fa-chevron-left"></i> mac环境下sublime text3配置go语言开发环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">博莱特萧</p>
+              <p class="site-description motion-element" itemprop="description">一个二次元技术宅男的博客尝试</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wumingzhizhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/4c46c4dfe18c" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-globe"></i>简书</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ftp服务的配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">ftp服务的配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FtpClientConfig"><span class="nav-number">2.2.</span> <span class="nav-text">FtpClientConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FtpClientFactory"><span class="nav-number">2.3.</span> <span class="nav-text">FtpClientFactory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FtpClientPool"><span class="nav-number">2.4.</span> <span class="nav-text">FtpClientPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FtpClientKeepAlive"><span class="nav-number">2.5.</span> <span class="nav-text">FtpClientKeepAlive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-ftp-xml"><span class="nav-number">2.6.</span> <span class="nav-text">spring-ftp.xml</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码"><span class="nav-number">3.</span> <span class="nav-text">源码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">博莱特萧</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
