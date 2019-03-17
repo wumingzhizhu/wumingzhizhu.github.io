@@ -79,25 +79,29 @@
 
 
 
-<meta name="description" content="前言 由于兴趣想使用go语言，所以想在sublime text3来开发go语言，目前主流的配置都是在sublime text3安装GoSublime插件和Golang build插件，其中，Golang build插件是go官方提供的支持go run,go get,go install等命令的插件，而GoSublime是一个交互式的go build工具，使用起来也是很方便，主要配合Golang b">
+<meta name="description" content="前言 某天，突然产生了对手机访问进行抓包的想法，google了一下，发现在mac下使用charles进行手机访问的抓包比较容易，就进行了一次手机抓包的尝试（安卓手机）。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mac环境下sublime text3配置go语言开发环境">
-<meta property="og:url" content="http://zeromk.top/2018/11/28/go-sublime-md/index.html">
+<meta property="og:title" content="mac下使用Charles抓包">
+<meta property="og:url" content="http://zeromk.top/2019/03/17/mac-chartles/index.html">
 <meta property="og:site_name" content="二次元与程序员">
-<meta property="og:description" content="前言 由于兴趣想使用go语言，所以想在sublime text3来开发go语言，目前主流的配置都是在sublime text3安装GoSublime插件和Golang build插件，其中，Golang build插件是go官方提供的支持go run,go get,go install等命令的插件，而GoSublime是一个交互式的go build工具，使用起来也是很方便，主要配合Golang b">
+<meta property="og:description" content="前言 某天，突然产生了对手机访问进行抓包的想法，google了一下，发现在mac下使用charles进行手机访问的抓包比较容易，就进行了一次手机抓包的尝试（安卓手机）。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434118080920.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434128908830.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434171931456.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434174695124.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434180146579.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434181183668.jpg">
-<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434184404804.jpg">
-<meta property="og:updated_time" content="2018-11-28T16:23:22.208Z">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528325417514.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528327774262.jpg">
+<meta property="og:image" content="http://zeromk.top/https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528329922849.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528331981826.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528333270180.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528347139321.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528348890706.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528350169528.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528351161931.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528353890176.jpg">
+<meta property="og:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528356124857.jpg">
+<meta property="og:updated_time" content="2019-03-17T15:37:37.459Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mac环境下sublime text3配置go语言开发环境">
-<meta name="twitter:description" content="前言 由于兴趣想使用go语言，所以想在sublime text3来开发go语言，目前主流的配置都是在sublime text3安装GoSublime插件和Golang build插件，其中，Golang build插件是go官方提供的支持go run,go get,go install等命令的插件，而GoSublime是一个交互式的go build工具，使用起来也是很方便，主要配合Golang b">
-<meta name="twitter:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434118080920.jpg">
+<meta name="twitter:title" content="mac下使用Charles抓包">
+<meta name="twitter:description" content="前言 某天，突然产生了对手机访问进行抓包的想法，google了一下，发现在mac下使用charles进行手机访问的抓包比较容易，就进行了一次手机抓包的尝试（安卓手机）。">
+<meta name="twitter:image" content="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528325417514.jpg">
 
 
 
@@ -127,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://zeromk.top/2018/11/28/go-sublime-md/"/>
+  <link rel="canonical" href="http://zeromk.top/2019/03/17/mac-chartles/"/>
 
 
 
 
 
-  <title>mac环境下sublime text3配置go语言开发环境 | 二次元与程序员</title>
+  <title>mac下使用Charles抓包 | 二次元与程序员</title>
   
 
 
@@ -240,7 +244,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zeromk.top/2018/11/28/go-sublime-md/">
+    <link itemprop="mainEntityOfPage" href="http://zeromk.top/2019/03/17/mac-chartles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="博莱特萧">
@@ -257,7 +261,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mac环境下sublime text3配置go语言开发环境</h1>
+          <h1 class="post-title" itemprop="name headline">mac下使用Charles抓包</h1>
         
 
         <div class="post-meta">
@@ -269,8 +273,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T17:31:26+08:00">
-                2018-11-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-17T22:10:48+08:00">
+                2019-03-17
               </time>
             
 
@@ -308,35 +312,62 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p>由于兴趣想使用go语言，所以想在sublime text3来开发go语言，目前主流的配置都是在<strong>sublime text3</strong>安装<strong>GoSublime</strong>插件和<strong>Golang build</strong>插件，其中，<strong>Golang build</strong>插件是go官方提供的支持go run,go get,go install等命令的插件，而<strong>GoSublime</strong>是一个交互式的go build工具，使用起来也是很方便，主要配合Golang build使用。</p>
+<p>某天，突然产生了对手机访问进行抓包的想法，google了一下，发现在mac下使用charles进行手机访问的抓包比较容易，就进行了一次手机抓包的尝试（安卓手机）。</p>
 </blockquote>
 <a id="more"></a>
-<h1 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h1><blockquote>
-<p>sublime text3安装和go语言安装参照网上教程</p>
+<h1 id="mac安装charles"><a href="#mac安装charles" class="headerlink" title="mac安装charles"></a>mac安装charles</h1><blockquote>
+<p>对于mac下安装charles，网上教程很多，这里不再进行说明，如果有条件的话，最好进行购买。</p>
 </blockquote>
-<h2 id="安装Golang-build插件"><a href="#安装Golang-build插件" class="headerlink" title="安装Golang build插件"></a>安装Golang build插件</h2><ul>
-<li>通过command + shit + p打开sublime text的package control，package control是sublime text的一个包安装工具。</li>
-<li>输入pcip，选择第一个进入包安装<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434118080920.jpg" alt=""></li>
-<li>然后输入Golang build选择Golang build安装</li>
-<li><p>进入perferences -&gt; package settings -&gt; Golang Config -&gt; Settings-User配置<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434128908830.jpg" alt=""><br>配置PATH和GOPATH，配置的是go的项目路径，不是安装路径。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;PATH&quot;: &quot;/Users/workspace/go/bin&quot;,</span><br><span class="line">    // 这里改成你自己的GOPATH</span><br><span class="line">    &quot;GOPATH&quot;: &quot;/Users/workspace/go&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>点击tools -&gt; build wiht(或者快捷键command + shift + b)即可以在控制台使用get run、go install、go build、go clean等命令。(由于我安装了goSublime插件，所以是控制台效果，否则是在一个框里的)<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434171931456.jpg" alt=""></p>
-<h2 id="安装Go-Sublime插件"><a href="#安装Go-Sublime插件" class="headerlink" title="安装Go Sublime插件"></a>安装Go Sublime插件</h2><blockquote>
-<p>以前可以直接通过package install来安装这个插件，但是最新的情况是在package install找不到这个了，所以我们必须手动安装。</p>
+<h1 id="charles捕获http请求"><a href="#charles捕获http请求" class="headerlink" title="charles捕获http请求"></a>charles捕获http请求</h1><blockquote>
+<p>1、<strong>Proxy –&gt; macOS</strong> Proxy 先打开代理，使得mac上所有请求都通过charles进行代理。</p>
 </blockquote>
-</li>
-<li><p>首先要找到自己的插件安装路径，在perferences -&gt; Browse Packages可以找到。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434174695124.jpg" alt=""></p>
-</li>
-<li>然后在该路径下通过<code>git clone https://margo.sh/GoSublime</code>命令即可以下载该插件了（进入控制台输入该命令）。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434180146579.jpg" alt=""></li>
-<li><p>同样的，我们也要设置Go Sublime。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434181183668.jpg" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;env&quot;: &#123;</span><br><span class="line">        &quot;GOPATH&quot;: &quot;/Users/workspace/go&quot;,  //go程序的个人代码工程路径</span><br><span class="line">        &quot;GOROOT&quot;: &quot;/usr/local/go&quot;  //go语言安装路径</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写一个go程序，通过<code>command + shift + b</code>或者 <code>command + b</code>即可以在控制台运行该程序。<br><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15434184404804.jpg" alt=""></p>
-</li>
-</ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
-<p><a href="https://yq.aliyun.com/articles/615533" target="_blank" rel="noopener">https://yq.aliyun.com/articles/615533</a><br><a href="https://awen.me/post/64483.html" target="_blank" rel="noopener">https://awen.me/post/64483.html</a><br><a href="https://github.com/DisposaBoy/GoSublime/tree/development" target="_blank" rel="noopener">https://github.com/DisposaBoy/GoSublime/tree/development</a></p>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528325417514.jpg" alt="-w596"></p>
+<blockquote>
+<p>2、<strong>Proxy –&gt; Proxy Settings</strong> 设置监听端口号为8888。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528327774262.jpg" alt="-w592"></p>
+<blockquote>
+<p>3、此时，用电脑访问百度，就已经可以获取访问的包了，如果我们需要监听手机的访问，就还得在手机上进行设置。</p>
+</blockquote>
+<p><img src="/https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528329922849.jpg" alt="-w900"></p>
+<blockquote>
+<p>4、先获取电脑的ip地址，<strong>Help –&gt; Local Ip Address</strong></p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528331981826.jpg" alt="-w484"></p>
+<blockquote>
+<p>5、然后在手机连接wifi，此时手机和电脑连接的必须是同一个wifi，然后在手机设置代理。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528333270180.jpg" alt="-w404"></p>
+<p>6、设置完成后，在手机打开一个网址，此时chartles就可以获取到手机访问的包了。</p>
+<h1 id="charles捕获https请求"><a href="#charles捕获https请求" class="headerlink" title="charles捕获https请求"></a>charles捕获https请求</h1><blockquote>
+<p>http的请求我们已经可以获取，但是有些网站是https的，如果我们需要解析https的包，就需要安装证书了。</p>
+</blockquote>
+<blockquote>
+<p>1、<strong>Help –&gt; SSL Proxying –&gt; install Charles Root Certificate</strong>,首先在mac安装CA证书。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528347139321.jpg" alt="-w839"></p>
+<blockquote>
+<p>2、然后要始终信任该证书。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528348890706.jpg" alt="-w513"></p>
+<blockquote>
+<p>3、<strong>Help –&gt; SSL Proxying –&gt; Install Charles Root Certificate On …</strong>,然后生成手机上的证书。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528350169528.jpg" alt="-w867"></p>
+<blockquote>
+<p>4、<strong>Help –&gt; SSL Proxying –&gt; Save …</strong>,然后保存该证书，它会生成一个类似<strong>charles-ssl-proxying.pem</strong>的文件，把该文件的后缀改为<strong>.crt</strong>,然后发送到你的安卓手机，进行安装即可。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528351161931.jpg" alt="-w834"></p>
+<blockquote>
+<p>5、<strong>Proxy –&gt; SSL Proxying setting</strong>,设置你要监听的https请求的网址</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528353890176.jpg" alt="-w592"></p>
+<blockquote>
+<p>6、手机再访问该网址，即可以抓到https的包了。</p>
+</blockquote>
+<p><img src="https://hexobk-1256184688.cos.ap-chengdu.myqcloud.com/blog/15528356124857.jpg" alt="-w900"></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
+<p><a href="https://www.jianshu.com/p/0bc767840e42" target="_blank" rel="noopener">https://www.jianshu.com/p/0bc767840e42</a><br><a href="https://blog.csdn.net/qq_28867949/article/details/79070165" target="_blank" rel="noopener">https://blog.csdn.net/qq_28867949/article/details/79070165</a></p>
 </blockquote>
 
       
@@ -362,8 +393,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/25/java-1/" rel="next" title="java文件解压缩技术探讨">
-                <i class="fa fa-chevron-left"></i> java文件解压缩技术探讨
+              <a href="/2018/12/01/java-dbcp-pools/" rel="next" title="java通过dbcp实现一个数据库连接池">
+                <i class="fa fa-chevron-left"></i> java通过dbcp实现一个数据库连接池
               </a>
             
           </div>
@@ -371,10 +402,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/29/java-ftp-pools/" rel="prev" title="java实现ftp连接池">
-                java实现ftp连接池 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -504,7 +531,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装教程"><span class="nav-number">2.</span> <span class="nav-text">安装教程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Golang-build插件"><span class="nav-number">2.1.</span> <span class="nav-text">安装Golang build插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Go-Sublime插件"><span class="nav-number">2.2.</span> <span class="nav-text">安装Go Sublime插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mac安装charles"><span class="nav-number">2.</span> <span class="nav-text">mac安装charles</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#charles捕获http请求"><span class="nav-number">3.</span> <span class="nav-text">charles捕获http请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#charles捕获https请求"><span class="nav-number">4.</span> <span class="nav-text">charles捕获https请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
